@@ -2,9 +2,9 @@
     "name": "psycho-bot-interact",
     "version": "1.0.0",
     "description": "Your personal mental health assistant brought to your throught visuals",
-    "main": "server/server.js",  
+    "main": "server/server.js",
     "scripts": {
-      "start": "node server/server.js", 
+      "start": "node server/server.js",
       "build": "cd client && npm install && npm run build",
       "heroku-postbuild": "npm run build"
     },

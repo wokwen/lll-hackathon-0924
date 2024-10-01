@@ -21,7 +21,7 @@
   /* background-color: #6d6d8f; */
   border-radius: 4px;
   color: rgb(8, 9, 9);
-  font-weight: 800;
+  font-weight: 500;
   margin: 7px;
   padding: 5px;
 }
@@ -42,4 +42,5 @@
 
 #psych-name {
   color: red;
+  font-weight: 900;
 }
