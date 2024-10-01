@@ -1,0 +1,21 @@
+{
+    "name": "your-app-name",
+    "version": "1.0.0",
+    "description": "Your full-stack app with a Node.js backend and frontend",
+    "main": "server.js",  
+    "scripts": {
+      "start": "node server.js", 
+      "build": "cd client && npm install && npm run build",
+      "heroku-postbuild": "npm run build"
+    },
+    "engines": {
+      "node": "22.0.0" 
+    },
+    "dependencies": {
+      "express": "^4.17.1",
+      "cors": "^2.8.5"
+    },
+    "devDependencies": {
+    }
+  }
+  
