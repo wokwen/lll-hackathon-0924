@@ -3,6 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const OpenAI = require('openai');
 const cors = require('cors');
+const path = require('path');
+
 require('dotenv').config();
 
 const app = express();
@@ -16,7 +18,13 @@ const openai = new OpenAI({
 
 app.use(bodyParser.json());
 
+app.use(express.static(path.join(__dirname, '../client/build')));
+
 app.use(cors());
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '../client/build/index.html'));
+  });
 
 var phrases_history = [];
 
