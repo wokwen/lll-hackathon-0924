@@ -13,9 +13,12 @@ const openai = new OpenAI({
     // apiKey: process.env.OPENAI_API_KEY, 
 });
 
+
 app.use(bodyParser.json());
 
 app.use(cors());
+
+var phrases_history = [];
 
 // Function to get response from OpenAI
 async function getResponse(user_input) {
@@ -23,12 +26,17 @@ async function getResponse(user_input) {
     try {
         const response = await openai.chat.completions.create({
             model: 'gpt-4o-mini',
-            messages: [{
+            messages: [
+                {
+                    role: 'system',
+                    content: `Please follow the following prompt strictly: ${prompt}`
+                },
+                {
                 role: 'user',
-                content: `${prompt} \n\n Here's what the user has chosen: ${user_input}`,
+                content: `${user_input}`,
             }],
             max_tokens: 100,
-            temperature: 0.7,
+            temperature: 0.8,
         });
 
         return response.choices[0].message.content;
@@ -45,11 +53,18 @@ async function generatePhrases() {
             model: 'gpt-4o-mini',
             messages: [{
                 role: 'user',
-                content: "Please provide exactly 8 concise phrases that describe symptoms of psychological distress. Do not include any explanations, definitions, or additional information. Format the output as a simple numbered list. Additionally, do not number or bullet them.",
+                content: `Please provide exactly 8 concise phrases that describe symptoms of psychological distress. 
+                Do not include any explanations, definitions, or additional information. 
+                Format the output as a simple numbered list. 
+                Additionally, do not number or bullet them.
+                Finally, please do not include any of the phrases from this list ${phrases_history}
+                `,
             }],
-            max_tokens: 5,
-            temperature: 0.8,
+            max_tokens: 110,
+            temperature: 0.9,
         });
+        hist = phrases.choices[0].message.content
+        phrases_history.push(hist)
         return phrases.choices[0].message.content;
     } catch (error) {
         console.error('Error fetching OpenAI API response:', error.response ? error.response.data : error.message);
@@ -61,16 +76,12 @@ app.get('/api', (req, res) => {
     return res.json("Hey there");
 });
 
-app.get('/api/phrases', (req, res) => {
-    return res.json("here's the phrases api")
-})
-
 // POST route to retrieve phrases and return AI response
 app.post('/api/phrases', async (req, res) => {
-    // const concern = req.body;
-    // if (!concern) {
-    //     return res.status(400).json({ error: 'User concern is required' });
-    // }
+    const { concern } = req.body;
+    if (!concern) {
+        return res.status(400).json({ error: 'User concern is required' });
+    }
     try {
         const aiResponse = await generatePhrases();
 

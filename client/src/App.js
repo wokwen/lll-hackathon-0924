@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import { Button } from './components/Button';
-import { text } from './dummy_text';
 
 function generateRandomColor() {
   const colors = ['red', 'blue', 'green', 'black', 'grey', 'brown', 'yellow', 'orange', 'indigo', 'violet'];
@@ -10,32 +9,33 @@ function generateRandomColor() {
 }
 
 function App() {
-  const [message, setMessage] = useState('Hey there');
-  const [clickedText, setClickedText] = useState('');
-  const initialPhrases = ['Welcome', 'To', 'This', 'New', 'Mental', 'Health', 'Game', ';)']
+  const [initPsyhcBot, setPsychBot] = useState('Responses from psychologist bot will be posted here!');
+  const initialPhrases = ['Fatigued', 'Isolated', 'Stressed', 'Unstable', 'Disconnected', 'Overwhelmed', 'Worried', 'Malnourished']
   const [phrases, setPhrases] = useState(initialPhrases);
 
-  useEffect(() => {
+  // Fetch PsychBot response only when a concern is set (after a button is clicked)
+  const fetchPsychBotResponse = (concern) => {
     fetch('http://localhost:8080/api', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ concern: 'I feel hungry' }),
+      body: JSON.stringify({ concern }),  // Use dynamic concern
     })
       .then(response => response.json())
       .then(data => {
-        setMessage(data.response);
+        setPsychBot(data.response);
         console.log(data);
       })
       .catch(error => console.error('Error:', error));
-  }, []);
+  };
+
 
   const handleButtonClick = (btnText) => {
-    setClickedText(btnText);  // Update the clicked text
-    console.log('Button clicked:', btnText);  // Log the clicked text
-    // You can also send `btnText` to the backend if needed.
+    console.log('Button clicked:', btnText);  
+    setPsychBot(fetchPsychBotResponse(btnText));
   };
+  
 
   function generatePhrases() {
     fetch('http://localhost:8080/api/phrases', {
@@ -47,25 +47,24 @@ function App() {
     })
       .then(response => response.json())
       .then(data => {
-        const phrasesArray = data.response.split('\n').filter(phrase => phrase.trim() !== '');
+        const phrasesArray = data.response.split('\n').filter(phrase => phrase.trim() !== '').map(text => text.replace(/^\d+\.\s*/, ''));
         setPhrases(phrasesArray);
-        console.log(data.response);
+        console.log(phrasesArray);
       })
       .catch(error => console.error('Error:', error));
   }
 
   return (
     <div className="App">
+      <p>How do you feel?</p>
       <div className="container">
         {phrases.map((txt, ind) => (
-          <Button key={ind} text={txt} color={generateRandomColor()} />
+          <Button key={ind} text={txt} color={generateRandomColor()} onClick={() => handleButtonClick(txt)}/>
         ))}
       </div>
-      {/* <div className='generate' onClick={generatePhrases}> */}
-        <button id='generate' onClick={generatePhrases}>Play</button>
-      {/* </div> */}
+      <button id='generate' onClick={generatePhrases}>Generate</button>
       <div className="response">
-        Psychologist response: {message}  
+        <span id='psych-name'>PsychBot response: </span>{initPsyhcBot}  
       </div>
     </div>
   );

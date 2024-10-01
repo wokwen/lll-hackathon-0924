@@ -12,23 +12,25 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  height: 80vh;
+  height: 70vh;
 }
 
 .response {
   width: 600px;
   height: 120px;
-  background-color: rgb(7, 7, 122);
+  /* background-color: #6d6d8f; */
   border-radius: 4px;
-  color: aliceblue;
+  color: rgb(8, 9, 9);
   font-weight: 800;
+  margin: 7px;
+  padding: 5px;
 }
 
 #generate {
-  background-color: rgb(249, 2, 2);
+  background-color: rgb(255, 1, 1);
   width: 100px;
   height: 40px;
-  margin: 2px;
+  margin: 4px;
   padding: 2px;
   display: flex;
   justify-content: center;
@@ -36,4 +38,8 @@
   color: aliceblue;
   font-weight: 900;
   border-radius: 5px;
+}
+
+#psych-name {
+  color: red;
 }
