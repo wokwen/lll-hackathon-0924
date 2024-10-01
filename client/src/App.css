@@ -17,7 +17,23 @@
 
 .response {
   width: 600px;
-  height: 150px;
+  height: 120px;
   background-color: rgb(7, 7, 122);
   border-radius: 4px;
+  color: aliceblue;
+  font-weight: 800;
+}
+
+#generate {
+  background-color: rgb(249, 2, 2);
+  width: 100px;
+  height: 40px;
+  margin: 2px;
+  padding: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: aliceblue;
+  font-weight: 900;
+  border-radius: 5px;
 }
